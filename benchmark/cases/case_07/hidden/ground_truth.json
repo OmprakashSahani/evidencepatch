@@ -1,0 +1,64 @@
+{
+  "case_id": "case_07",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/virelune.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-VIRELUNE-2026-V7"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {
+      "virelune_allergy": true,
+      "marker_t": 90,
+      "exception_approved": true,
+      "monitoring_current": true,
+      "expected_allowed": false
+    },
+    {
+      "virelune_allergy": false,
+      "marker_t": 79,
+      "exception_approved": false,
+      "monitoring_current": false,
+      "expected_allowed": true
+    },
+    {
+      "virelune_allergy": false,
+      "marker_t": 80,
+      "exception_approved": false,
+      "monitoring_current": true,
+      "expected_allowed": false
+    },
+    {
+      "virelune_allergy": false,
+      "marker_t": 80,
+      "exception_approved": true,
+      "monitoring_current": false,
+      "expected_allowed": false
+    },
+    {
+      "virelune_allergy": false,
+      "marker_t": 80,
+      "exception_approved": true,
+      "monitoring_current": true,
+      "expected_allowed": true
+    },
+    {
+      "virelune_allergy": false,
+      "marker_t": 100,
+      "exception_approved": true,
+      "monitoring_current": true,
+      "expected_allowed": true
+    },
+    {
+      "virelune_allergy": false,
+      "marker_t": 100,
+      "exception_approved": false,
+      "monitoring_current": false,
+      "expected_allowed": false
+    }
+  ],
+  "preserve_unrelated_behavior": true
+}
