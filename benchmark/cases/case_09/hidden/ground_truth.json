@@ -1,0 +1,86 @@
+{
+  "case_id": "case_09",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/initiation.py",
+    "medication_rules/continuation.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-AVENORIL-2026-V9"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {
+      "workflow": "initiation",
+      "avenoril_allergy": true,
+      "marker_v": 64,
+      "baseline_review_complete": true,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "initiation",
+      "avenoril_allergy": false,
+      "marker_v": 64,
+      "baseline_review_complete": false,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "initiation",
+      "avenoril_allergy": false,
+      "marker_v": 64,
+      "baseline_review_complete": true,
+      "expected_allowed": true
+    },
+    {
+      "workflow": "initiation",
+      "avenoril_allergy": false,
+      "marker_v": 65,
+      "baseline_review_complete": true,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "initiation",
+      "avenoril_allergy": false,
+      "marker_v": 90,
+      "baseline_review_complete": true,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "continuation",
+      "avenoril_allergy": true,
+      "marker_v": 64,
+      "followup_current": true,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "continuation",
+      "avenoril_allergy": false,
+      "marker_v": 64,
+      "followup_current": false,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "continuation",
+      "avenoril_allergy": false,
+      "marker_v": 64,
+      "followup_current": true,
+      "expected_allowed": true
+    },
+    {
+      "workflow": "continuation",
+      "avenoril_allergy": false,
+      "marker_v": 65,
+      "followup_current": true,
+      "expected_allowed": false
+    },
+    {
+      "workflow": "continuation",
+      "avenoril_allergy": false,
+      "marker_v": 90,
+      "followup_current": true,
+      "expected_allowed": false
+    }
+  ],
+  "preserve_unrelated_behavior": true
+}
