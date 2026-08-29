@@ -17,7 +17,7 @@ These are representative frozen traces for auditability, not additional benchmar
 
 The allowed final-rescore directory contains only its aggregate `benchmark_summary.json`. That public snapshot does not retain case_10's submitted action or a case-level result artifact, so the actual baseline action is intentionally not reconstructed or inferred here.
 
-The observable failure mode is narrower than a claim about medical reasoning: the direct solver could decide not to modify the repository while still choosing the wrong software-maintenance disposition taxonomy. The allowed public record does not establish that the model misunderstood the medical evidence.
+The observable failure mode is narrower than a claim about medical reasoning: the direct one-shot solver selected an incorrect software-maintenance disposition according to `action_correct`. The permitted public final-rescore artifacts do not retain the submitted action, so this document does not reconstruct the exact wrong disposition. The allowed public record does not establish that the model misunderstood the medical evidence.
 
 ### Evidence Trail
 

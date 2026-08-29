@@ -38,7 +38,7 @@ Immediately disclose:
 
 **Say:**
 
-“The baseline's only complete-case failure was `action_correct`. The public baseline summary does not retain its submitted action, so we do not infer it. What the trace does establish is that direct one-shot solving can leave the repository unchanged while selecting the wrong maintenance disposition taxonomy.
+“The baseline's only complete-case failure was `action_correct`. The public baseline summary does not retain its submitted action, so we do not infer it. What the trace establishes is that direct one-shot solving selected the wrong maintenance disposition according to `action_correct`; the permitted public artifact does not retain the submitted action, so we do not reconstruct it.
 
 “The advanced path made the interpretation explicit: controlling authority matched the repository, while weaker evidence created conflicting change pressure. Deterministic governance selected `ESCALATE`; there was no patch call. The case passed every check, and no retry or hidden evaluator feedback was used.”
 
