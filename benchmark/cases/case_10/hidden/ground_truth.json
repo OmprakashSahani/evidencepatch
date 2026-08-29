@@ -1,0 +1,50 @@
+{
+  "case_id": "case_10",
+  "expected_action": "ESCALATE",
+  "expected_impacted_production_files": [],
+  "required_evidence_ids": [
+    "SYN-ZORAVEL-GUIDE-2026-V4",
+    "SYN-ZORAVEL-STUDY-2026-08"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {
+      "zoravel_allergy": true,
+      "marker_w": 74,
+      "expected_allowed": false
+    },
+    {
+      "zoravel_allergy": false,
+      "marker_w": 74,
+      "expected_allowed": true
+    },
+    {
+      "zoravel_allergy": false,
+      "marker_w": 75,
+      "expected_allowed": false
+    },
+    {
+      "zoravel_allergy": false,
+      "marker_w": 80,
+      "expected_allowed": false
+    },
+    {
+      "zoravel_allergy": false,
+      "marker_w": 85,
+      "expected_allowed": false
+    },
+    {
+      "zoravel_allergy": false,
+      "marker_w": 100,
+      "expected_allowed": false
+    }
+  ],
+  "preserve_unrelated_behavior": true,
+  "automatic_patch_permitted": false,
+  "reason_code": "CONFLICTING_NON_AUTHORITATIVE_EVIDENCE",
+  "authoritative_evidence_id": "SYN-ZORAVEL-GUIDE-2026-V4",
+  "conflicting_evidence_id": "SYN-ZORAVEL-STUDY-2026-08",
+  "current_executable_behavior_remains_unchanged": true,
+  "threshold_change_to_85_supported": false
+}
