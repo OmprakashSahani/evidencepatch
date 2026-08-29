@@ -1,0 +1,35 @@
+{
+  "case_id": "case_02",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/teralune.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-TERALUNE-2026-V3"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {
+      "teralune_allergy": true,
+      "expected_allowed": false
+    },
+    {
+      "teralune_allergy": false,
+      "marker_r": 49,
+      "expected_allowed": true
+    },
+    {
+      "teralune_allergy": false,
+      "marker_r": 50,
+      "expected_allowed": true
+    },
+    {
+      "teralune_allergy": false,
+      "marker_r": 80,
+      "expected_allowed": true
+    }
+  ],
+  "obsolete_marker_r_restriction_must_be_removed": true,
+  "preserve_unrelated_behavior": true
+}
