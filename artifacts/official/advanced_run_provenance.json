@@ -1,0 +1,41 @@
+{
+  "authorized_patch_prompt_sha256": "0c7d2a3a0497de8af86d6d2fccea67a9d9037e0ecc1a88c93ecbd21aaf620e08",
+  "benchmark_summary_sha256": "e5e3493302386d7e7c59b636b5f7116118bfec9611e9c407e807f0ae25cdd57a",
+  "case_ids": [
+    "case_01",
+    "case_02",
+    "case_03",
+    "case_04",
+    "case_05",
+    "case_06",
+    "case_07",
+    "case_08",
+    "case_09",
+    "case_10",
+    "case_11",
+    "case_12"
+  ],
+  "contract_extraction_prompt_sha256": "a6fdef8e656f415acca5f21d3f79e567afc4112af1d86e98e5fe16302a8d0cd0",
+  "experiment": "evidencepatch_advanced",
+  "extraction_timeout_seconds": 180.0,
+  "hidden_timeout_seconds": 30.0,
+  "model": "gpt-5.6-sol",
+  "official_run": true,
+  "patch_timeout_seconds": 180.0,
+  "retry_policy": "none",
+  "schema_version": 1,
+  "source_file_sha256": {
+    "evidencepatch/advanced_benchmark.py": "da78249f9a3da1fbb521079ea81da06ee7520c619762625ce66ba6050ff6df36",
+    "evidencepatch/benchmark_evaluation.py": "e7999689225f142032d3c785563c6821d335546e7e3aef52c576f666191e58f7",
+    "evidencepatch/case_evaluator.py": "1fa959d83643f3f85cfb0e29bab530f9da2146eeb75f5b851b027e5f6b6fde2a",
+    "evidencepatch/change_contract.py": "194a96979f25f56320f682c17ee5a3a17a1fc7a2023f9736597fd8fff443b0bf",
+    "evidencepatch/codex_runner.py": "86d320a00aa59ce0e4f2211e40f333284741a286081bc1c0bd94d43b07def48e",
+    "evidencepatch/contract_extraction.py": "acb3ea652a248b47adf700a4346b0fd82b051d7e631e1b7d49260fe0f83afbd4",
+    "evidencepatch/contract_runner.py": "db823aa9c3f600b1b4bd21af6db90951c399ba5c294b867e0164e850f2721e01",
+    "evidencepatch/hidden_behavior.py": "d440212b169a04f065a891e51bba2f6fce90e2acc8cd64867d940a6f608769f2",
+    "evidencepatch/patch_runner.py": "ee5a260ae9dcd1e9394fbb260a0117cbec3a7617dd123e4b83bce6b04ca525d9",
+    "evidencepatch/static_evaluator.py": "941a3fdab02963f6ede0f770f87671714294a9605fe398b07be575edaa538436",
+    "evidencepatch/workflow.py": "5de17ebdb477c2dd9510cb6553a76373c197b857a57e8c047a94d6a38878fbcd"
+  },
+  "source_git_commit": "ff000f41d01ba7a351fdcc7a082e3fc046294941"
+}

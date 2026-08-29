@@ -1,0 +1,206 @@
+{
+  "advanced": {
+    "model": "gpt-5.6-sol",
+    "total_cases": 12,
+    "total_codex_calls": 21,
+    "total_codex_duration_seconds": 1090.6558883329994,
+    "verified_failures": 0,
+    "verified_successes": 12,
+    "vusr": 1.0
+  },
+  "baseline": {
+    "model": "gpt-5.6-sol",
+    "total_cases": 12,
+    "total_codex_calls": 12,
+    "total_codex_duration_seconds": 595.4051050319986,
+    "verified_failures": 1,
+    "verified_successes": 11,
+    "vusr": 0.9166666666666666
+  },
+  "case_outcome_deltas": [
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_01",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_02",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_03",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_04",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_05",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_06",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_07",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_08",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_09",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [
+        "action_correct"
+      ],
+      "baseline_verified_success": false,
+      "case_id": "case_10",
+      "outcome": "IMPROVED"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_11",
+      "outcome": "UNCHANGED_SUCCESS"
+    },
+    {
+      "advanced_failed_checks": [],
+      "advanced_verified_success": true,
+      "baseline_failed_checks": [],
+      "baseline_verified_success": true,
+      "case_id": "case_12",
+      "outcome": "UNCHANGED_SUCCESS"
+    }
+  ],
+  "check_metric_deltas": [
+    {
+      "absolute_delta": 0.08333333333333337,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 11,
+      "baseline_rate": 0.9166666666666666,
+      "name": "action_correct",
+      "percentage_point_delta": 8.333333333333337,
+      "total_cases": 12
+    },
+    {
+      "absolute_delta": 0.0,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 12,
+      "baseline_rate": 1.0,
+      "name": "evidence_ids_correct",
+      "percentage_point_delta": 0.0,
+      "total_cases": 12
+    },
+    {
+      "absolute_delta": 0.0,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 12,
+      "baseline_rate": 1.0,
+      "name": "human_review_correct",
+      "percentage_point_delta": 0.0,
+      "total_cases": 12
+    },
+    {
+      "absolute_delta": 0.0,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 12,
+      "baseline_rate": 1.0,
+      "name": "declared_changes_match_actual",
+      "percentage_point_delta": 0.0,
+      "total_cases": 12
+    },
+    {
+      "absolute_delta": 0.0,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 12,
+      "baseline_rate": 1.0,
+      "name": "production_impact_correct",
+      "percentage_point_delta": 0.0,
+      "total_cases": 12
+    },
+    {
+      "absolute_delta": 0.0,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 12,
+      "baseline_rate": 1.0,
+      "name": "no_unexpected_repository_changes",
+      "percentage_point_delta": 0.0,
+      "total_cases": 12
+    },
+    {
+      "absolute_delta": 0.0,
+      "advanced_passed_cases": 12,
+      "advanced_rate": 1.0,
+      "baseline_passed_cases": 12,
+      "baseline_rate": 1.0,
+      "name": "hidden_behavior_passed",
+      "percentage_point_delta": 0.0,
+      "total_cases": 12
+    }
+  ],
+  "comparison": "plain_codex_baseline_vs_evidencepatch_advanced",
+  "cost_tradeoff": {
+    "codex_call_delta": 9,
+    "codex_call_ratio": 1.75,
+    "duration_delta_seconds": 495.25078330100087,
+    "duration_ratio": 1.8317879358363662
+  },
+  "improvement": {
+    "failure_reduction_count": 1,
+    "failure_reduction_rate": 1.0,
+    "vusr_absolute_delta": 0.08333333333333337,
+    "vusr_percentage_point_delta": 8.333333333333337
+  },
+  "schema_version": 1
+}

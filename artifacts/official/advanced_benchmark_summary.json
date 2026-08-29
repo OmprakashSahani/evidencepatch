@@ -1,0 +1,224 @@
+{
+  "action_counts": {
+    "ESCALATE": 2,
+    "NO_PATCH": 1,
+    "PATCH": 9,
+    "UNRESOLVED": 0
+  },
+  "authorized_patch_prompt_sha256": "0c7d2a3a0497de8af86d6d2fccea67a9d9037e0ecc1a88c93ecbd21aaf620e08",
+  "cases": [
+    {
+      "action": "PATCH",
+      "case_id": "case_01",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 109.42117124600054,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_02",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 115.40976641199995,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_03",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 103.41068680799981,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_04",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 117.22703978400023,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_05",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 91.0949207069998,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_06",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 112.89820641200004,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_07",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 115.80256864999956,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_08",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 93.47268000999975,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "PATCH",
+      "case_id": "case_09",
+      "codex_call_count": 2,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": 0,
+      "patch_timed_out": false,
+      "total_codex_duration_seconds": 103.92311046500072,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "ESCALATE",
+      "case_id": "case_10",
+      "codex_call_count": 1,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": null,
+      "patch_timed_out": null,
+      "total_codex_duration_seconds": 40.60034456499943,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "ESCALATE",
+      "case_id": "case_11",
+      "codex_call_count": 1,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": null,
+      "patch_timed_out": null,
+      "total_codex_duration_seconds": 47.65701826900022,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    },
+    {
+      "action": "NO_PATCH",
+      "case_id": "case_12",
+      "codex_call_count": 1,
+      "extraction_returncode": 0,
+      "extraction_timed_out": false,
+      "failed_checks": [],
+      "patch_returncode": null,
+      "patch_timed_out": null,
+      "total_codex_duration_seconds": 39.7383750049994,
+      "verified_success": true,
+      "workflow_completed_successfully": true
+    }
+  ],
+  "check_metrics": [
+    {
+      "name": "action_correct",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    },
+    {
+      "name": "evidence_ids_correct",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    },
+    {
+      "name": "human_review_correct",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    },
+    {
+      "name": "declared_changes_match_actual",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    },
+    {
+      "name": "production_impact_correct",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    },
+    {
+      "name": "no_unexpected_repository_changes",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    },
+    {
+      "name": "hidden_behavior_passed",
+      "passed_cases": 12,
+      "rate": 1.0,
+      "total_cases": 12
+    }
+  ],
+  "contract_extraction_prompt_sha256": "a6fdef8e656f415acca5f21d3f79e567afc4112af1d86e98e5fe16302a8d0cd0",
+  "experiment": "evidencepatch_advanced",
+  "model": "gpt-5.6-sol",
+  "nonzero_exit_invocations": [],
+  "schema_version": 1,
+  "timed_out_invocations": [],
+  "total_cases": 12,
+  "total_codex_calls": 21,
+  "total_codex_duration_seconds": 1090.6558883329994,
+  "verified_failures": 0,
+  "verified_successes": 12,
+  "vusr": 1.0,
+  "workflow_failure_cases": []
+}
