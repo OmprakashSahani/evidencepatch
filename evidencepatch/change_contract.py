@@ -41,8 +41,12 @@ class EvidenceAssessment:
     conflicts_with_current_authority: bool
 
     def __post_init__(self) -> None:
-        if not isinstance(self.evidence_id, str) or not self.evidence_id.strip():
-            raise ValueError("evidence_id must be a non-empty string")
+        if (
+            not isinstance(self.evidence_id, str)
+            or not self.evidence_id
+            or self.evidence_id != self.evidence_id.strip()
+        ):
+            raise ValueError("evidence_id must be a non-empty stripped string")
         if not isinstance(self.authority, EvidenceAuthority):
             raise ValueError("authority must be an EvidenceAuthority")
         if not isinstance(self.status, EvidenceStatus):
@@ -89,8 +93,12 @@ class ClinicalChangeContract:
         ):
             if not isinstance(getattr(self, field), bool):
                 raise ValueError(f"{field} must be a boolean")
-        if not isinstance(self.rationale, str) or not self.rationale.strip():
-            raise ValueError("rationale must be a non-empty string")
+        if (
+            not isinstance(self.rationale, str)
+            or not self.rationale
+            or self.rationale != self.rationale.strip()
+        ):
+            raise ValueError("rationale must be a non-empty stripped string")
         if self.executable_behavior_change and self.semantic_equivalence:
             raise ValueError(
                 "executable_behavior_change and semantic_equivalence cannot both be true"

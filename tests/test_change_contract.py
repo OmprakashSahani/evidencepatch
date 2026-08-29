@@ -271,11 +271,32 @@ def test_blank_evidence_id_is_rejected():
         _evidence("  ")
 
 
+@pytest.mark.parametrize("evidence_id", [" SOURCE-A", "SOURCE-A "])
+def test_evidence_id_with_surrounding_whitespace_is_rejected(evidence_id):
+    with pytest.raises(ValueError, match="evidence_id.*stripped"):
+        _evidence(evidence_id)
+
+
 def test_blank_rationale_is_rejected():
     with pytest.raises(ValueError, match="rationale.*non-empty"):
         ClinicalChangeContract(
             1, (_evidence(),), False, False, False, False, "  "
         )
+
+
+@pytest.mark.parametrize("rationale", [" rationale", "rationale "])
+def test_rationale_with_surrounding_whitespace_is_rejected(rationale):
+    with pytest.raises(ValueError, match="rationale.*stripped"):
+        ClinicalChangeContract(
+            1, (_evidence(),), False, False, False, False, rationale
+        )
+
+
+def test_whitespace_variant_cannot_coexist_with_canonical_evidence_id():
+    canonical = _evidence("SOURCE-A")
+
+    with pytest.raises(ValueError, match="evidence_id.*stripped"):
+        _contract((canonical, _evidence(" SOURCE-A ")))
 
 
 def test_current_authoritative_evidence_excludes_superseded_items():
