@@ -1,0 +1,64 @@
+{
+  "case_id": "case_08",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/dorevex.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-DOREVEX-2026-V8"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {
+      "dorevex_allergy": false,
+      "treatment_path": "primary",
+      "marker_u": 0,
+      "specialist_approved": false,
+      "expected_allowed": true
+    },
+    {
+      "dorevex_allergy": true,
+      "treatment_path": "primary",
+      "marker_u": 100,
+      "specialist_approved": true,
+      "expected_allowed": false
+    },
+    {
+      "dorevex_allergy": false,
+      "treatment_path": "adjunct",
+      "marker_u": 30,
+      "specialist_approved": true,
+      "expected_allowed": false
+    },
+    {
+      "dorevex_allergy": false,
+      "treatment_path": "adjunct",
+      "marker_u": 100,
+      "specialist_approved": true,
+      "expected_allowed": false
+    },
+    {
+      "dorevex_allergy": false,
+      "treatment_path": "adjunct",
+      "marker_u": 29,
+      "specialist_approved": true,
+      "expected_allowed": false
+    },
+    {
+      "dorevex_allergy": false,
+      "treatment_path": "adjunct",
+      "marker_u": 50,
+      "specialist_approved": false,
+      "expected_allowed": false
+    },
+    {
+      "dorevex_allergy": false,
+      "treatment_path": "unknown",
+      "marker_u": 100,
+      "specialist_approved": true,
+      "expected_allowed": false
+    }
+  ],
+  "preserve_unrelated_behavior": true
+}
