@@ -6,7 +6,7 @@
     "SYN-PRAXENOR-GUIDE-2026-V1",
     "SYN-PRAXENOR-GUIDE-2026-V2"
   ],
-  "requires_human_review": true,
+  "requires_human_review": false,
   "evaluation_basis": "behavior",
   "required_behaviors": [
     {

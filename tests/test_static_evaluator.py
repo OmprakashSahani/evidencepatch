@@ -97,6 +97,7 @@ def test_correct_case_12_no_patch_passes_all_checks(tmp_path):
         action="NO_PATCH",
         changed_files=[],
         evidence_ids=["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
+        human_review_required=False,
     )
 
     assert evaluate_static_case(case, workspace).passed is True
@@ -109,6 +110,7 @@ def test_wrong_action_only_fails_action_check(tmp_path):
         action="ESCALATE",
         changed_files=[],
         evidence_ids=["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
+        human_review_required=False,
     )
 
     checks = _checks(evaluate_static_case(case, workspace))
@@ -168,7 +170,7 @@ def test_wrong_human_review_fails_review_check(tmp_path):
         action="NO_PATCH",
         changed_files=[],
         evidence_ids=["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
-        human_review_required=False,
+        human_review_required=True,
     )
 
     assert not evaluate_static_case(case, workspace).get_check(
@@ -284,6 +286,7 @@ def test_no_patch_repository_mutation_is_rejected(tmp_path):
         action="NO_PATCH",
         changed_files=[],
         evidence_ids=["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
+        human_review_required=False,
     )
 
     checks = _checks(evaluate_static_case(case, workspace))

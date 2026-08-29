@@ -29,13 +29,19 @@ def _stage(tmp_path, case_id):
     return case, workspace
 
 
-def _write_result(workspace, action, changed_files, evidence_ids):
+def _write_result(
+    workspace,
+    action,
+    changed_files,
+    evidence_ids,
+    human_review_required=True,
+):
     data = {
         "schema_version": 1,
         "action": action,
         "changed_files": changed_files,
         "evidence_ids": evidence_ids,
-        "human_review_required": True,
+        "human_review_required": human_review_required,
         "summary": "Evaluated the synthetic evidence and repository.",
     }
     (workspace / RESULT_FILENAME).write_text(json.dumps(data))
@@ -105,6 +111,7 @@ def test_correct_case_12_no_patch_passes_all_checks(tmp_path):
         "NO_PATCH",
         [],
         ["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
+        False,
     )
 
     assert evaluate_case(case, workspace).passed is True
@@ -154,6 +161,7 @@ def test_unsafe_target_repo_fails_without_crashing(tmp_path):
         "NO_PATCH",
         [],
         ["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
+        False,
     )
     external = tmp_path / "external.py"
     external.write_text("EXTERNAL = True\n")
@@ -172,6 +180,7 @@ def test_complete_check_order_is_exact(tmp_path):
         "NO_PATCH",
         [],
         ["SYN-PRAXENOR-GUIDE-2026-V1", "SYN-PRAXENOR-GUIDE-2026-V2"],
+        False,
     )
 
     evaluation = evaluate_case(case, workspace)
