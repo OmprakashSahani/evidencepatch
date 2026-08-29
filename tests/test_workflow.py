@@ -272,6 +272,106 @@ def test_wrong_path_types_rejected(tmp_path: Path, monkeypatch: pytest.MonkeyPat
         run_evidencepatch_workflow(**kwargs)
 
 
+@pytest.mark.parametrize("artifact,relationship", [
+    ("extraction", "equal_workspace"),
+    ("extraction", "inside_workspace"),
+    ("extraction", "contains_workspace"),
+    ("extraction", "equal_canonical"),
+    ("extraction", "inside_canonical"),
+    ("extraction", "contains_canonical"),
+    ("patch", "equal_workspace"),
+    ("patch", "inside_workspace"),
+    ("patch", "contains_workspace"),
+    ("patch", "equal_canonical"),
+    ("patch", "inside_canonical"),
+    ("patch", "contains_canonical"),
+])
+def test_artifact_workspace_or_canonical_overlap_fails_before_extraction(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    artifact: str,
+    relationship: str,
+) -> None:
+    workspace, canonical = setup(tmp_path)
+    value = contract("NO_PATCH")
+    extraction_calls, patch_calls = install(monkeypatch, workspace, canonical, value)
+    paths = {
+        "extraction_artifacts_dir": tmp_path / "extract",
+        "patch_artifacts_dir": tmp_path / "patch",
+    }
+    subject = workspace if "workspace" in relationship else canonical
+    if relationship.startswith("equal"):
+        invalid = subject
+    elif relationship.startswith("inside"):
+        invalid = subject / "artifacts"
+    else:
+        invalid = tmp_path
+    paths[f"{artifact}_artifacts_dir"] = invalid
+    with pytest.raises(ValueError, match="outside and disjoint"):
+        run_evidencepatch_workflow(workspace, canonical, **paths)
+    assert extraction_calls == []
+    assert patch_calls == []
+
+
+@pytest.mark.parametrize("relationship", ["equal", "extraction_inside_patch", "patch_inside_extraction"])
+def test_artifact_locations_cannot_overlap_each_other_before_extraction(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, relationship: str
+) -> None:
+    workspace, canonical = setup(tmp_path)
+    value = contract("PATCH")
+    extraction_calls, patch_calls = install(monkeypatch, workspace, canonical, value)
+    parent = tmp_path / "artifacts"
+    if relationship == "equal":
+        extraction, patch = parent, parent
+    elif relationship == "extraction_inside_patch":
+        extraction, patch = parent / "extract", parent
+    else:
+        extraction, patch = parent, parent / "patch"
+    with pytest.raises(ValueError, match="outside and disjoint"):
+        run_evidencepatch_workflow(workspace, canonical, extraction, patch)
+    assert extraction_calls == []
+    assert patch_calls == []
+
+
+@pytest.mark.parametrize("artifact", ["extraction", "patch"])
+def test_existing_artifact_symlink_rejected_before_extraction(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, artifact: str
+) -> None:
+    workspace, canonical = setup(tmp_path)
+    value = contract("PATCH")
+    extraction_calls, patch_calls = install(monkeypatch, workspace, canonical, value)
+    target = tmp_path / f"{artifact}-target"
+    target.mkdir()
+    link = tmp_path / f"{artifact}-link"
+    link.symlink_to(target, target_is_directory=True)
+    extraction = link if artifact == "extraction" else tmp_path / "extract"
+    patch = link if artifact == "patch" else tmp_path / "patch"
+    with pytest.raises(ValueError, match="must not be a symlink"):
+        run_evidencepatch_workflow(workspace, canonical, extraction, patch)
+    assert extraction_calls == []
+    assert patch_calls == []
+
+
+@pytest.mark.parametrize("kind", ["NO_PATCH", "ESCALATE", "PATCH"])
+def test_disjoint_artifacts_preserve_branch_behavior_and_canonical_bytes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, kind: str
+) -> None:
+    workspace, canonical = setup(tmp_path)
+    value = contract(kind)
+    before = (canonical / "rule.py").read_bytes()
+    extraction_calls, patch_calls = install(monkeypatch, workspace, canonical, value)
+    patch_artifacts = tmp_path / "patch-artifacts"
+    run = run_evidencepatch_workflow(
+        workspace, canonical, tmp_path / "extraction-artifacts", patch_artifacts
+    )
+    assert run.completed_successfully
+    assert len(extraction_calls) == 1
+    assert len(patch_calls) == (1 if kind == "PATCH" else 0)
+    if kind != "PATCH":
+        assert not patch_artifacts.exists()
+    assert (canonical / "rule.py").read_bytes() == before
+
+
 def test_error_is_normalized_and_bounded(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     workspace, canonical = setup(tmp_path); value = contract("PATCH")
     install(monkeypatch, workspace, canonical, value, patch_ok=False)

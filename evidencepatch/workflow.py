@@ -137,6 +137,20 @@ def _validate_directory(path: object, name: str) -> Path:
     return path.resolve()
 
 
+def _validate_artifact_path(path: object, name: str) -> Path:
+    """Resolve an artifact location without creating it or accepting a symlink."""
+    if not isinstance(path, Path):
+        raise ValueError(f"{name} must be a pathlib.Path")
+    if path.is_symlink():
+        raise ValueError(f"{name} must not be a symlink")
+    return path.resolve()
+
+
+def _require_disjoint(first: Path, first_name: str, second: Path, second_name: str) -> None:
+    if _paths_overlap(first, second):
+        raise ValueError(f"{first_name} must be outside and disjoint from {second_name}")
+
+
 def _failure(
     extraction_run: ContractExtractionRun,
     result_path: Path,
@@ -176,14 +190,32 @@ def run_evidencepatch_workflow(
     """Run extraction, deterministic governance, and any authorized patch once."""
     resolved_workspace = _validate_directory(workspace, "workspace")
     resolved_canonical = _validate_directory(canonical_repo, "canonical_repo")
-    if not isinstance(extraction_artifacts_dir, Path):
-        raise ValueError("extraction_artifacts_dir must be a pathlib.Path")
-    if not isinstance(patch_artifacts_dir, Path):
-        raise ValueError("patch_artifacts_dir must be a pathlib.Path")
+    resolved_extraction_artifacts = _validate_artifact_path(
+        extraction_artifacts_dir, "extraction_artifacts_dir"
+    )
+    resolved_patch_artifacts = _validate_artifact_path(
+        patch_artifacts_dir, "patch_artifacts_dir"
+    )
     if _paths_overlap(resolved_workspace, resolved_canonical):
         raise ValueError(
             "canonical_repo must be outside and disjoint from the solver workspace"
         )
+    for artifact, artifact_name in (
+        (resolved_extraction_artifacts, "extraction_artifacts_dir"),
+        (resolved_patch_artifacts, "patch_artifacts_dir"),
+    ):
+        _require_disjoint(
+            artifact, artifact_name, resolved_workspace, "solver workspace"
+        )
+        _require_disjoint(
+            artifact, artifact_name, resolved_canonical, "canonical_repo"
+        )
+    _require_disjoint(
+        resolved_extraction_artifacts,
+        "extraction_artifacts_dir",
+        resolved_patch_artifacts,
+        "patch_artifacts_dir",
+    )
     if not compare_repositories(
         resolved_canonical, resolved_workspace / "repo"
     ).is_clean:
@@ -195,7 +227,7 @@ def run_evidencepatch_workflow(
 
     extraction_run = run_contract_extraction(
         resolved_workspace,
-        extraction_artifacts_dir,
+        resolved_extraction_artifacts,
         model=model,
         timeout_seconds=extraction_timeout_seconds,
     )
@@ -217,7 +249,7 @@ def run_evidencepatch_workflow(
             resolved_workspace,
             resolved_canonical,
             contract,
-            patch_artifacts_dir,
+            resolved_patch_artifacts,
             model=model,
             timeout_seconds=patch_timeout_seconds,
         )
