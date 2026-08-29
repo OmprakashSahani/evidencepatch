@@ -1,4 +1,5 @@
 from pathlib import Path
+import subprocess
 import sys
 
 import pytest
@@ -7,6 +8,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
 
+import evidencepatch.hidden_behavior as hidden_behavior_module
 from evidencepatch.hidden_behavior import HiddenBehaviorResult, run_hidden_behavior
 from evidencepatch.workspace import prepare_case_workspace
 
@@ -92,3 +94,82 @@ def test_hidden_behavior_result_rejects_non_boolean_passed(invalid_passed):
 def test_hidden_behavior_result_rejects_inconsistent_counts():
     with pytest.raises(ValueError, match="sum to tests_total"):
         HiddenBehaviorResult(False, 2, 1, 0, 0, 0, 1, "detail")
+
+
+def test_resolved_pytest_executable_is_used(tmp_path, monkeypatch):
+    case, target_repo = _stage(tmp_path, "case_12")
+    observed = {}
+    monkeypatch.setattr(hidden_behavior_module.shutil, "which", lambda name: "/fake/bin/pytest")
+
+    def fake_run(command, **kwargs):
+        observed["command"] = command
+        junit_argument = next(
+            argument for argument in command if argument.startswith("--junitxml=")
+        )
+        report = Path(junit_argument.split("=", 1)[1])
+        report.write_text(
+            '<testsuite tests="1" failures="0" errors="0" skipped="0" />'
+        )
+        return subprocess.CompletedProcess(command, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(hidden_behavior_module.subprocess, "run", fake_run)
+
+    result = run_hidden_behavior(case, target_repo)
+
+    assert observed["command"][0] == "/fake/bin/pytest"
+    assert "-m" not in observed["command"]
+    assert "pytest" not in observed["command"][1:]
+    assert result.passed is True
+    assert result.tests_total == 1
+
+
+def test_missing_pytest_executable_is_infrastructure_error(tmp_path, monkeypatch):
+    case, target_repo = _stage(tmp_path, "case_12")
+    monkeypatch.setattr(hidden_behavior_module.shutil, "which", lambda name: None)
+
+    with pytest.raises(RuntimeError, match="environment.*pytest executable"):
+        run_hidden_behavior(case, target_repo)
+
+
+def test_missing_junit_includes_stderr_diagnostic(tmp_path, monkeypatch):
+    case, target_repo = _stage(tmp_path, "case_12")
+    monkeypatch.setattr(hidden_behavior_module.shutil, "which", lambda name: "/fake/bin/pytest")
+    monkeypatch.setattr(
+        hidden_behavior_module.subprocess,
+        "run",
+        lambda command, **kwargs: subprocess.CompletedProcess(
+            command,
+            1,
+            stdout="",
+            stderr="synthetic pytest startup failure",
+        ),
+    )
+
+    result = run_hidden_behavior(case, target_repo)
+
+    assert result.passed is False
+    assert result.tests_total == 0
+    assert result.returncode == 1
+    assert "synthetic pytest startup failure" in result.detail
+
+
+def test_missing_junit_diagnostic_is_bounded(tmp_path, monkeypatch):
+    case, target_repo = _stage(tmp_path, "case_12")
+    monkeypatch.setattr(hidden_behavior_module.shutil, "which", lambda name: "/fake/bin/pytest")
+    monkeypatch.setattr(
+        hidden_behavior_module.subprocess,
+        "run",
+        lambda command, **kwargs: subprocess.CompletedProcess(
+            command,
+            1,
+            stdout="",
+            stderr="x" * 5000,
+        ),
+    )
+
+    result = run_hidden_behavior(case, target_repo)
+
+    prefix = "Hidden pytest JUnit report was not created; subprocess diagnostic: "
+    assert result.detail.startswith(prefix)
+    assert len(result.detail) <= len(prefix) + 400
+    assert len(result.detail) < 1000

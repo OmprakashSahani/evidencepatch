@@ -4,8 +4,8 @@ from dataclasses import dataclass
 import math
 import os
 from pathlib import Path
+import shutil
 import subprocess
-import sys
 import tempfile
 import xml.etree.ElementTree as ET
 
@@ -63,10 +63,42 @@ def _execution_failure(detail: str, returncode: int | None) -> HiddenBehaviorRes
     return HiddenBehaviorResult(False, 0, 0, 0, 0, 0, returncode, detail)
 
 
-def _parse_junit(report: Path, returncode: int) -> HiddenBehaviorResult:
+def _resolve_pytest_executable() -> str:
+    """Resolve pytest from PATH or raise an evaluator-environment error."""
+    executable = shutil.which("pytest")
+    if not executable:
+        raise RuntimeError(
+            "Hidden evaluator environment has no pytest executable available on PATH"
+        )
+    return executable
+
+
+def _bounded_process_output(stderr: str, stdout: str, limit: int = 400) -> str:
+    """Return a bounded, whitespace-normalized subprocess diagnostic."""
+    selected = stderr if stderr.strip() else stdout
+    normalized = " ".join(selected.split())
+    if not normalized:
+        return "no subprocess diagnostic was available"
+    if len(normalized) > limit:
+        return normalized[: limit - 3] + "..."
+    return normalized
+
+
+def _parse_junit(
+    report: Path,
+    returncode: int,
+    *,
+    stdout: str,
+    stderr: str,
+) -> HiddenBehaviorResult:
     """Parse pytest JUnit counts into a behavioral result."""
     if not report.is_file():
-        return _execution_failure("Hidden pytest JUnit report was not created", returncode)
+        diagnostic = _bounded_process_output(stderr, stdout)
+        return _execution_failure(
+            "Hidden pytest JUnit report was not created; "
+            f"subprocess diagnostic: {diagnostic}",
+            returncode,
+        )
     try:
         root = ET.parse(report).getroot()
     except (ET.ParseError, OSError) as error:
@@ -150,13 +182,12 @@ def run_hidden_behavior(
     environment["PYTEST_ADDOPTS"] = ""
     environment.pop("PYTHONPATH", None)
     project_root = Path(__file__).resolve().parents[1]
+    pytest_executable = _resolve_pytest_executable()
 
     with tempfile.TemporaryDirectory(prefix="evidencepatch-hidden-") as temporary:
         report = Path(temporary) / "junit.xml"
         command = [
-            sys.executable,
-            "-m",
-            "pytest",
+            pytest_executable,
             *(str(path.resolve()) for path in hidden_tests),
             "-q",
             "-p",
@@ -180,4 +211,9 @@ def run_hidden_behavior(
                 f"Hidden pytest execution timed out after {timeout_seconds:g} seconds",
                 None,
             )
-        return _parse_junit(report, completed.returncode)
+        return _parse_junit(
+            report,
+            completed.returncode,
+            stdout=completed.stdout,
+            stderr=completed.stderr,
+        )
