@@ -2,7 +2,13 @@ import sys
 from pathlib import Path
 
 
-CASE_REPOSITORY = Path(__file__).resolve().parents[1] / "repo"
+PROJECT_ROOT = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from evidencepatch.hidden_target import resolve_hidden_target_repo
+
+
+CASE_REPOSITORY = resolve_hidden_target_repo(__file__)
 sys.path.insert(0, str(CASE_REPOSITORY))
 
 from medication_rules.praxenor import is_praxenor_allowed
