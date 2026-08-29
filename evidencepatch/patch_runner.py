@@ -181,6 +181,15 @@ def _validate_canonical_repo(canonical_repo: Path) -> Path:
     return canonical_repo.resolve()
 
 
+def _paths_overlap(first: Path, second: Path) -> bool:
+    """Return whether either resolved path contains the other."""
+    return (
+        first == second
+        or first in second.parents
+        or second in first.parents
+    )
+
+
 def _protected_manifest(workspace: Path) -> str:
     records: list[str] = []
     for name in ("task.md", CONTRACT_FILENAME):
@@ -227,6 +236,17 @@ def run_authorized_patch(
         raise ValueError("contract must be a ClinicalChangeContract")
     resolved_workspace = _validate_workspace(workspace)
     resolved_canonical = _validate_canonical_repo(canonical_repo)
+    if _paths_overlap(resolved_workspace, resolved_canonical):
+        raise ValueError(
+            "canonical_repo must be outside and disjoint from the solver workspace"
+        )
+    if not isinstance(artifacts_dir, Path):
+        raise ValueError("artifacts_dir must be a pathlib.Path")
+    resolved_artifacts = artifacts_dir.resolve()
+    if _paths_overlap(resolved_artifacts, resolved_canonical):
+        raise ValueError(
+            "artifacts_dir must be outside and disjoint from canonical_repo"
+        )
     loaded_contract = load_contract(resolved_workspace / CONTRACT_FILENAME)
     if loaded_contract != contract:
         raise ValueError("workspace contract does not equal the supplied contract")

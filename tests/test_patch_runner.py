@@ -198,6 +198,64 @@ def test_canonical_must_initially_match_and_is_not_modified(tmp_path: Path, monk
     assert not calls and (canonical / "rule.py").read_bytes() == original
 
 
+def test_canonical_equal_to_workspace_repo_rejected_before_codex(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    workspace, _, contract = setup(tmp_path)
+    calls = fake(monkeypatch)
+    with pytest.raises(ValueError, match="canonical_repo must be outside"):
+        run_authorized_patch(workspace, workspace / "repo", contract, tmp_path / "artifacts")
+    assert calls == []
+
+
+def test_canonical_inside_workspace_rejected_before_codex(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    workspace, _, contract = setup(tmp_path)
+    calls = fake(monkeypatch)
+    with pytest.raises(ValueError, match="canonical_repo must be outside"):
+        run_authorized_patch(workspace, workspace / "evidence", contract, tmp_path / "artifacts")
+    assert calls == []
+
+
+def test_workspace_inside_canonical_rejected_before_codex(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    workspace, _, contract = setup(tmp_path)
+    calls = fake(monkeypatch)
+    with pytest.raises(ValueError, match="canonical_repo must be outside"):
+        run_authorized_patch(workspace, tmp_path, contract, tmp_path / "artifacts")
+    assert calls == []
+
+
+@pytest.mark.parametrize("relationship", ["inside", "equal", "contains"])
+def test_artifacts_canonical_overlap_rejected_before_codex(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, relationship: str) -> None:
+    workspace, canonical, contract = setup(tmp_path)
+    if relationship == "inside":
+        artifacts = canonical / "artifacts"
+    elif relationship == "equal":
+        artifacts = canonical
+    else:
+        artifacts = tmp_path
+    calls = fake(monkeypatch)
+    with pytest.raises(ValueError, match="artifacts_dir must be outside"):
+        run_authorized_patch(workspace, canonical, contract, artifacts)
+    assert calls == []
+
+
+def test_wrong_artifacts_type_rejected_before_codex(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    workspace, canonical, contract = setup(tmp_path)
+    calls = fake(monkeypatch)
+    with pytest.raises(ValueError, match="artifacts_dir must be a pathlib.Path"):
+        run_authorized_patch(workspace, canonical, contract, "artifacts")  # type: ignore[arg-type]
+    assert calls == []
+
+
+def test_disjoint_layout_succeeds_and_preserves_canonical_bytes(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    workspace, canonical, contract = setup(tmp_path)
+    before = {path.relative_to(canonical): path.read_bytes() for path in canonical.rglob("*") if path.is_file()}
+    calls = fake(monkeypatch, modify_repo)
+    run = run_authorized_patch(workspace, canonical, contract, tmp_path / "artifacts")
+    after = {path.relative_to(canonical): path.read_bytes() for path in canonical.rglob("*") if path.is_file()}
+    assert run.completed_successfully
+    assert len(calls) == 1
+    assert after == before
+
+
 def test_protected_manifest_unchanged_on_valid_patch(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     workspace, canonical, contract = setup(tmp_path)
     fake(monkeypatch, modify_repo)
