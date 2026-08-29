@@ -1,5 +1,15 @@
 # Reproducibility
 
+## Agent and tool environment
+
+- Coding/reasoning agent: OpenAI Codex CLI
+- Official benchmark model: `gpt-5.6-sol`
+- Public evidence provider: Exa MCP
+- Deterministic governance/verification surface: EvidencePatch MCP
+- Official retry policy: none
+
+The frozen contract-extraction prompt SHA-256 is `a6fdef8e656f415acca5f21d3f79e567afc4112af1d86e98e5fe16302a8d0cd0`. The frozen authorized-patch prompt SHA-256 is `0c7d2a3a0497de8af86d6d2fccea67a9d9037e0ecc1a88c93ecbd21aaf620e08`.
+
 ## Environment and tests
 
 Use a supported Python environment with the repository as the working directory:
@@ -60,7 +70,16 @@ Do not commit credentials. Hosted OAuth localhost callbacks can be awkward in re
 
 ## Official experiment provenance
 
-The benchmark implementation is pinned by tag `evidencepatch-advanced-official-v1` at source commit `ff000f41d01ba7a351fdcc7a082e3fc046294941`. Historical measured outputs are preserved as byte-for-byte copies under [official artifacts](../artifacts/official/README.md). Later documentation and MCP product work on `main` do not redefine the frozen historical run.
+The benchmark implementation is pinned by tag `evidencepatch-advanced-official-v1` at source commit `ff000f41d01ba7a351fdcc7a082e3fc046294941`. Historical measured outputs are preserved as byte-for-byte copies under [official artifacts](../artifacts/official/README.md). Later documentation and MCP product work on `main` do not redefine the frozen historical run. The official run used no retries.
+
+## Runtime and Cost Reporting
+
+| Workflow | Codex calls | Solver duration |
+| --- | ---: | ---: |
+| Plain Codex baseline | 12 | 595.405 seconds |
+| EvidencePatch advanced | 21 | 1090.656 seconds |
+
+The advanced workflow used 1.75× the calls and 1.83× the solver duration. Historical monetary API cost was not recorded in the frozen official artifacts, so the submission does not invent one. Codex call count and solver duration are reported as the available compute measures.
 
 ## Baseline reproduction example
 

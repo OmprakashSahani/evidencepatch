@@ -1,6 +1,27 @@
-# Experiment Changelog
+# Improvement Changelog
 
-This changelog records experimental and product milestones. It is not a release-marketing log, and the iterations were not selected using hidden benchmark answers.
+This experiment-oriented changelog records what changed, why, and what the frozen evidence showed. It is not marketing copy. No official benchmark retry was used, and changes were not selected from hidden benchmark answers.
+
+| Stage | What we tried and why | Evidence | Decision / learning |
+| --- | --- | --- | --- |
+| Baseline | One direct Codex solve per case to establish a simple starting point | 11/12, 91.67% VUSR; only complete-case failure was `action_correct` | Useful fair baseline; model-controlled final disposition was not retained |
+| Structured contract/governance | Separate evidence interpretation from final action taxonomy after the disposition failure | Clinical Change Contract plus frozen `PATCH` / `NO_PATCH` / `ESCALATE` gate | Kept |
+| Authorized patch stage | Permit implementation only after deterministic `PATCH` authorization | Successful two-call PATCH trajectory in advanced case_01 | Kept |
+| Advanced final workflow | Combine extraction, governance, optional patching, and deterministic results | 12/12, 100.00% VUSR | Kept, with higher inference compute |
+| MCP product surface | Expose deterministic governance and verification as reusable tools | Real Exa-backed FDA/AJKD public-evidence demo | Kept |
+| Human review correction | Correct published AJKD lifecycle status `PROVISIONAL` → `CURRENT` | Action remained `ESCALATE`; 5/5 provenance checks passed | Reinforced the explicit human checkpoint |
+
+## Main Failure Mode and Hot Take
+
+**Main failure mode:** a capable agent can still choose the wrong software-maintenance disposition even when most of the task is handled correctly.
+
+**Hot take:** in consequential software maintenance, “no code change” is not a complete outcome category. Some evidence states require explicit escalation, and the `PATCH` / `NO_PATCH` / `ESCALATE` boundary should be governed separately from code generation. Fresh medical evidence is not automatically actionable medical evidence.
+
+## Removed Experiment / Design Choice
+
+The direct one-shot baseline allowed the generative solver to select the final maintenance disposition. That design established a strong 11/12 baseline, but the only complete-case failure was `action_correct`. Model-controlled final disposition was not retained: the final workflow has Codex propose the Clinical Change Contract and deterministic governance select the action. The unavailable baseline action is not reconstructed, and this result does not establish that the baseline misunderstood the medical evidence.
+
+The advanced improvement required more inference compute: 12 → 21 calls (1.75×) and 595.405 → 1090.656 seconds (1.83×). It is a reliability-versus-compute tradeoff, not an equal-budget comparison.
 
 ## Iteration 2B — Public documentation and frozen evidence packaging
 

@@ -38,6 +38,18 @@ flowchart LR
 
 See [Architecture](docs/architecture.md) for the full boundaries and action taxonomy.
 
+## Agent Stack
+
+- Coding/reasoning agent: OpenAI Codex CLI
+- Official benchmark model: `gpt-5.6-sol`
+- Baseline: one direct Codex solve per benchmark case
+- Advanced workflow: Codex contract-extraction agent → deterministic EvidencePatch governance → separate authorized Codex patch agent only when `action = PATCH`
+- Public evidence discovery: Exa MCP
+- Governance and repository verification: EvidencePatch MCP
+- Official benchmark retry policy: none
+
+Codex is used purposefully for semantic interpretation and implementation; final disposition governance and provenance rules are deterministic. EvidencePatch MCP is a governance and verification surface, not a coding agent.
+
 ## Measured Result
 
 On 12 synthetic medication-safety and clinical-software maintenance cases with `gpt-5.6-sol`:
@@ -51,6 +63,18 @@ On 12 synthetic medication-safety and clinical-software maintenance cases with `
 The improvement has a direct compute tradeoff: **1.75× Codex calls** (12 → 21) and **1.83× solver duration** (595.405 → 1090.656 seconds). This is a reliability-versus-compute result, not an equal-inference-budget comparison. It is not a claim of statistical significance or clinical safety.
 
 See the [official comparison](artifacts/official/comparison.md) and [evaluation documentation](docs/evaluation.md).
+
+## Main Failure Mode and Hot Take
+
+**Main failure mode:** a capable agent can still choose the wrong software-maintenance disposition even when most of the task is handled correctly. The baseline's only complete-case failure was `action_correct`; the permitted public artifact does not retain the submitted action, so it is not reconstructed.
+
+**Hot take:** in consequential software maintenance, “no code change” is not a complete outcome category. Some evidence states require explicit escalation, and the boundary between `PATCH`, `NO_PATCH`, and `ESCALATE` should be governed separately from code generation. This follows the central thesis: fresh medical evidence is not automatically actionable medical evidence.
+
+## Removed Experiment
+
+The simple baseline let one direct Codex solve choose the final maintenance disposition itself. It reached 11/12 complete-case success, with the sole failure on `action_correct`. The final architecture did not retain model-controlled final disposition: Codex proposes the Clinical Change Contract, then deterministic governance selects `PATCH`, `NO_PATCH`, or `ESCALATE`.
+
+The design lesson was that generation and governance should not necessarily be the same responsibility. This does not imply that the baseline misunderstood the medical evidence, and its unavailable submitted action is not inferred.
 
 ## MCP Product Surface
 
@@ -100,6 +124,12 @@ Do not put a real key in repository files. Hosted OAuth localhost callbacks can 
 
 The historical evidence is preserved as immutable copies in [official artifacts](artifacts/official/README.md). Setup, validation, MCP inspection, and clearly labeled expensive reproduction examples are in [Reproducibility](docs/reproducibility.md).
 
+## Hackathon Scope
+
+Normal Git history begins with a minimal README in commit `ffd2a70` on 2026-08-29. Subsequent commits that day add the EvidencePatch benchmark, evaluator, Clinical Change Contract, governance, runners, workflow, comparison, MCP server, and public documentation. Git history therefore establishes that the project-specific implementation in this repository was built after that initial commit; without an independently recorded competition window, this submission does not make a stronger categorical timing claim.
+
+OpenAI Codex CLI, Exa MCP, the MCP SDK, and Python ecosystem dependencies are external components. The project-specific EvidencePatch contracts, deterministic governance, isolated agent workflow, evaluation harness, MCP server, public demo, and audit documentation are implemented in this repository.
+
 ## Safety / Scope
 
 - The measured benchmark is synthetic.
@@ -115,5 +145,10 @@ The historical evidence is preserved as immutable copies in [official artifacts]
 - [Evaluation](docs/evaluation.md)
 - [Reproducibility](docs/reproducibility.md)
 - [Public MCP demo](docs/public_mcp_demo.md)
-- [Changelog](CHANGELOG.md)
+- [Representative trajectories](docs/trajectories.md)
+- [Under-five-minute demo script](docs/demo_script.md)
+- [Submission copy](docs/submission.md)
+- [Final submission audit](docs/final_audit.md)
+- [Improvement Changelog](CHANGELOG.md)
 - [Official artifact snapshots](artifacts/official/README.md)
+- [Official comparison](artifacts/official/comparison.md)

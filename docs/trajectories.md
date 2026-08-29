@@ -2,9 +2,18 @@
 
 These are representative frozen traces for auditability, not additional benchmark attempts. No solver was rerun to create this document.
 
+## Agent Inventory
+
+1. Plain Codex baseline solver — one OpenAI Codex CLI solve that interpreted the public case and produced the proposed result.
+2. Codex Clinical Change Contract extraction agent — converted public task, evidence, and repository state into a structured contract.
+3. Authorized Codex patch agent — implemented changes only after deterministic governance returned `PATCH`.
+4. Host/agent in the public MCP demo — orchestrated public retrieval, proposed the contract, and submitted it for deterministic assessment and verification.
+
+Exa MCP is the evidence-discovery tool/provider, not the final governance agent. EvidencePatch MCP is deterministic governance and verification, not a generative coding agent. The traces below show prompt identity or instructions, externally observable actions/responses, and result; they do not reproduce private chain-of-thought.
+
 ## Trajectory A — Plain Codex baseline failure mode
 
-### Observable setup and outcome
+### Instructions / prompt identity
 
 - System/workflow: plain Codex direct one-shot baseline
 - Model: `gpt-5.6-sol`
@@ -12,12 +21,19 @@ These are representative frozen traces for auditability, not additional benchmar
 - Retries: none
 - Input boundary: public task, evidence, repository, and result schema
 - Baseline prompt SHA-256: `75d55642223087f296b466094c3c68566ff2056c9fa956ec80f76ab45451c364`
+
+### Observable action / response
+
 - Public evaluation outcome: `verified_success = false`
 - Public failed checks: `action_correct` only
 
 The allowed final-rescore directory contains only its aggregate `benchmark_summary.json`. That public snapshot does not retain case_10's submitted action or a case-level result artifact, so the actual baseline action is intentionally not reconstructed or inferred here.
 
 The observable failure mode is narrower than a claim about medical reasoning: the direct one-shot solver selected an incorrect software-maintenance disposition according to `action_correct`. The permitted public final-rescore artifacts do not retain the submitted action, so this document does not reconstruct the exact wrong disposition. The allowed public record does not establish that the model misunderstood the medical evidence.
+
+### Result
+
+The public complete-case result was FAIL on `action_correct` only. No retry or human feedback occurred during the benchmark run.
 
 ### Evidence Trail
 
@@ -28,7 +44,7 @@ The observable failure mode is narrower than a claim about medical reasoning: th
 
 ## Trajectory B — EvidencePatch advanced recovery
 
-### Observable setup
+### Instructions / prompt identity
 
 - Model: `gpt-5.6-sol`
 - Contract extraction calls: 1
@@ -36,6 +52,9 @@ The observable failure mode is narrower than a claim about medical reasoning: th
 - Total Codex calls: 1
 - Retries: none
 - Contract extraction prompt SHA-256: `a6fdef8e656f415acca5f21d3f79e567afc4112af1d86e98e5fe16302a8d0cd0`
+
+### Observable actions / workflow responses
+
 - Extraction return code: 0
 - Extraction timeout: false
 - Workflow completed successfully: true
@@ -81,6 +100,10 @@ This made the distinction explicit: the repository was equivalent to controlling
 
 The official public summary records `verified_success = true` and `failed_checks = []`. The benchmark solver received no hidden evaluator feedback, and there was no retry.
 
+### Result
+
+`ESCALATE`, human review required, no patch stage, and verified success with no failed checks.
+
 ### Evidence Trail
 
 - `runs/evidencepatch_advanced_gpt56sol_20260829/experiment_metadata.json`
@@ -95,7 +118,7 @@ The official public summary records `verified_success = true` and `failed_checks
 
 The representative successful PATCH trace is advanced `case_01`. It demonstrates that EvidencePatch is not merely an escalation classifier.
 
-### Observable setup
+### Instructions / prompt identity
 
 - Model: `gpt-5.6-sol`
 - Contract extraction calls: 1
@@ -104,6 +127,9 @@ The representative successful PATCH trace is advanced `case_01`. It demonstrates
 - Retries: none
 - Contract extraction prompt SHA-256: `a6fdef8e656f415acca5f21d3f79e567afc4112af1d86e98e5fe16302a8d0cd0`
 - Authorized patch prompt SHA-256: `0c7d2a3a0497de8af86d6d2fccea67a9d9037e0ecc1a88c93ecbd21aaf620e08`
+
+### Observable actions / workflow responses
+
 - Both Codex calls returned 0 and did not time out
 
 ### Sequence
@@ -135,6 +161,10 @@ The separate patch stage produced the observable declared diff:
 
 The workflow completed successfully. The official summary records `verified_success = true` and `failed_checks = []`. No hidden behavior-test implementation is reproduced here.
 
+### Result
+
+`PATCH`, two declared changed files, human review required, and verified success with no failed checks.
+
 ### Evidence Trail
 
 - `runs/evidencepatch_advanced_gpt56sol_20260829/experiment_metadata.json`
@@ -163,7 +193,7 @@ Exa discovery/fetch
 
 The responsibilities remained distinct. Exa discovered the public evidence. The host proposed the Clinical Change Contract. A human corrected the host's interpretation of the published paper's lifecycle status. EvidencePatch deterministically governed and verified the corrected proposition.
 
-There was no Exa re-search during the correction, no repository modification, and no benchmark involvement. This is the explicit human-feedback example: review changed a structured interpretation without silently changing software, and the deterministic disposition remained stable.
+Exa discovery and fetch occurred in the original public run. EvidencePatch responded through `assess_change_contract`, `analyze_repository_impact`, and `verify_result_provenance`. There was no Exa re-search during the correction, no repository modification, and no benchmark involvement. The same three deterministic EvidencePatch tools reran after the human corrected `PROVISIONAL` to `CURRENT`; the action remained `ESCALATE` and 5/5 provenance checks passed. This is the explicit human-feedback example: review changed a structured interpretation without silently changing software, and the deterministic disposition remained stable.
 
 Evidence trail: `docs/public_mcp_demo.md`.
 
