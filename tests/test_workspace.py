@@ -59,3 +59,21 @@ def test_nonempty_destination_is_rejected(tmp_path):
         prepare_case_workspace(CASE_01, destination)
 
     assert existing.read_text() == "keep me\n"
+
+
+def test_symlink_to_private_content_is_rejected(tmp_path):
+    case = tmp_path / "case"
+    evidence = case / "evidence"
+    repository = case / "repo"
+    evidence.mkdir(parents=True)
+    repository.mkdir()
+    (case / "task.md").write_text("Synthetic task\n")
+    private = case / "private.txt"
+    private.write_text("hidden benchmark truth\n")
+    (evidence / "leaked.txt").symlink_to(private)
+    destination = tmp_path / "solver_workspace"
+
+    with pytest.raises(ValueError, match="Symbolic links"):
+        prepare_case_workspace(case, destination)
+
+    assert not destination.exists()
