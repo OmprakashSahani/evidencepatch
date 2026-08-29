@@ -1,0 +1,56 @@
+{
+  "case_id": "case_12",
+  "expected_action": "NO_PATCH",
+  "expected_impacted_production_files": [],
+  "required_evidence_ids": [
+    "SYN-PRAXENOR-GUIDE-2026-V1",
+    "SYN-PRAXENOR-GUIDE-2026-V2"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {
+      "praxenor_allergy": true,
+      "marker_y": 0,
+      "expected_allowed": false
+    },
+    {
+      "praxenor_allergy": true,
+      "marker_y": 49,
+      "expected_allowed": false
+    },
+    {
+      "praxenor_allergy": false,
+      "marker_y": 0,
+      "expected_allowed": true
+    },
+    {
+      "praxenor_allergy": false,
+      "marker_y": 49,
+      "expected_allowed": true
+    },
+    {
+      "praxenor_allergy": false,
+      "marker_y": 50,
+      "expected_allowed": false
+    },
+    {
+      "praxenor_allergy": false,
+      "marker_y": 51,
+      "expected_allowed": false
+    },
+    {
+      "praxenor_allergy": false,
+      "marker_y": 100,
+      "expected_allowed": false
+    }
+  ],
+  "preserve_unrelated_behavior": true,
+  "automatic_patch_permitted": false,
+  "reason_code": "NO_EXECUTABLE_BEHAVIOR_CHANGE",
+  "current_executable_behavior_remains_unchanged": true,
+  "authoritative_revision_present": true,
+  "semantic_equivalence_required": true,
+  "current_authoritative_evidence_id": "SYN-PRAXENOR-GUIDE-2026-V2",
+  "superseded_evidence_id": "SYN-PRAXENOR-GUIDE-2026-V1"
+}
