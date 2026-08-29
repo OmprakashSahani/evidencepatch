@@ -69,6 +69,16 @@ def _is_ignored_file(name: str) -> bool:
     return name in _IGNORED_FILENAMES or name.endswith(".pyc")
 
 
+def _reject_symlinks(root: Path) -> None:
+    """Reject symlinks anywhere in a repository, including ignored trees."""
+    for current, directories, files in os.walk(root, followlinks=False):
+        current_path = Path(current)
+        for name in directories + files:
+            path = current_path / name
+            if path.is_symlink():
+                raise ValueError(f"Repository trees must not contain symlinks: {path}")
+
+
 def _file_inventory(root: Path) -> dict[str, Path]:
     """Build a safe relative-path inventory of regular repository files."""
     inventory: dict[str, Path] = {}
@@ -101,6 +111,8 @@ def compare_repositories(
     """Compare two repository trees by regular-file paths and byte content."""
     _validate_root(canonical_repo, "Canonical")
     _validate_root(candidate_repo, "Candidate")
+    _reject_symlinks(canonical_repo)
+    _reject_symlinks(candidate_repo)
 
     canonical = _file_inventory(canonical_repo)
     candidate = _file_inventory(candidate_repo)

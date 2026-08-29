@@ -108,6 +108,27 @@ def test_runtime_artifact_directories_are_ignored(tmp_path, artifact_dir):
     assert compare_repositories(canonical, candidate).is_clean is True
 
 
+@pytest.mark.parametrize("artifact_dir", ["__pycache__", ".pytest_cache"])
+@pytest.mark.parametrize("link_kind", ["file", "directory"])
+def test_symlink_inside_ignored_directory_is_rejected(
+    tmp_path, artifact_dir, link_kind
+):
+    canonical, candidate = _repos(tmp_path)
+    ignored = candidate / "nested" / artifact_dir
+    ignored.mkdir(parents=True)
+    if link_kind == "file":
+        target = tmp_path / "external.txt"
+        target.write_text("external\n")
+        (ignored / "linked.txt").symlink_to(target)
+    else:
+        target = tmp_path / "external_directory"
+        target.mkdir()
+        (ignored / "linked_dir").symlink_to(target, target_is_directory=True)
+
+    with pytest.raises(ValueError, match="must not contain symlinks"):
+        compare_repositories(canonical, candidate)
+
+
 @pytest.mark.parametrize("artifact_file", ["module.pyc", ".coverage"])
 def test_runtime_artifact_files_are_ignored(tmp_path, artifact_file):
     canonical, candidate = _repos(tmp_path)
