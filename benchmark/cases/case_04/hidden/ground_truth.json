@@ -1,0 +1,20 @@
+{
+  "case_id": "case_04",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/caldrin.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-CALDRIN-2026-V2"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {"caldrin_allergy": false, "age_group": "adult", "expected_allowed": true},
+    {"caldrin_allergy": false, "age_group": "adolescent", "expected_allowed": false},
+    {"caldrin_allergy": false, "age_group": "child", "expected_allowed": false},
+    {"caldrin_allergy": true, "age_group": "adult", "expected_allowed": false},
+    {"caldrin_allergy": true, "age_group": "adolescent", "expected_allowed": false}
+  ],
+  "preserve_unrelated_behavior": true
+}

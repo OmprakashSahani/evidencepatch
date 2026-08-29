@@ -1,0 +1,21 @@
+{
+  "case_id": "case_03",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/norvexa.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-NORVEXA-2026-V4"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {"norvexa_allergy": true, "clearance_z": 60, "expected_allowed": false},
+    {"norvexa_allergy": false, "clearance_z": 39, "expected_allowed": false},
+    {"norvexa_allergy": false, "clearance_z": 40, "expected_allowed": false},
+    {"norvexa_allergy": false, "clearance_z": 54, "expected_allowed": false},
+    {"norvexa_allergy": false, "clearance_z": 55, "expected_allowed": true},
+    {"norvexa_allergy": false, "clearance_z": 60, "expected_allowed": true}
+  ],
+  "preserve_unrelated_behavior": true
+}

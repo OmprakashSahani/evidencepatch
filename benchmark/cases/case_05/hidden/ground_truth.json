@@ -1,0 +1,20 @@
+{
+  "case_id": "case_05",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/lumetra.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-LUMETRA-2026-V5"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {"lumetra_allergy": false, "age_group": "adult", "expected_allowed": true},
+    {"lumetra_allergy": false, "age_group": "adolescent", "expected_allowed": true},
+    {"lumetra_allergy": false, "age_group": "child", "expected_allowed": false},
+    {"lumetra_allergy": true, "age_group": "adult", "expected_allowed": false},
+    {"lumetra_allergy": true, "age_group": "adolescent", "expected_allowed": false}
+  ],
+  "preserve_unrelated_behavior": true
+}

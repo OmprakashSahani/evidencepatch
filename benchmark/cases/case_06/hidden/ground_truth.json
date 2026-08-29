@@ -1,0 +1,19 @@
+{
+  "case_id": "case_06",
+  "expected_action": "PATCH",
+  "expected_impacted_production_files": [
+    "medication_rules/serevon.py"
+  ],
+  "required_evidence_ids": [
+    "SYN-SEREVON-2026-V6"
+  ],
+  "requires_human_review": true,
+  "evaluation_basis": "behavior",
+  "required_behaviors": [
+    {"serevon_allergy": true, "monitoring_current": true, "expected_allowed": false},
+    {"serevon_allergy": true, "monitoring_current": false, "expected_allowed": false},
+    {"serevon_allergy": false, "monitoring_current": true, "expected_allowed": true},
+    {"serevon_allergy": false, "monitoring_current": false, "expected_allowed": false}
+  ],
+  "preserve_unrelated_behavior": true
+}
