@@ -4,6 +4,12 @@ Fresh medical evidence is not automatically actionable medical evidence.
 
 EvidencePatch governs evidence-backed maintenance of clinical-informatics and healthcare software. Its focus is not merely generating code, but establishing whether controlling evidence supports an executable behavior change, handling weaker conflicting evidence safely, and checking that repository changes match their declared provenance. It does not make clinical decisions.
 
+## Problem Statement
+
+EvidencePatch is for clinical-informatics engineers and healthcare-software teams maintaining executable medication-safety and clinical decision-support rules. The core bottleneck is not simply generating a code patch: a newer medical study may be important without superseding the regulator or guideline that currently controls executable software behavior.
+
+Engineers must determine which evidence is authoritative and current, whether executable semantics actually changed, whether weaker or conflicting evidence requires escalation, where the repository is affected, and whether a proposed patch can be traced to the evidence that justified it. A naive evidence-to-code agent can collapse evidence interpretation, authority judgment, action selection, implementation, and verification into one generative step, making consequential software maintenance difficult to audit and govern.
+
 ## What EvidencePatch Does
 
 EvidencePatch represents proposed evidence interpretations as a Clinical Change Contract, applies deterministic governance, and verifies the declared result against repository state. The possible dispositions are `PATCH`, `NO_PATCH`, and `ESCALATE`; both `PATCH` and `ESCALATE` require human review.
